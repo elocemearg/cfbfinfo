@@ -306,7 +306,7 @@ int main(int argc, char **argv) {
 
             ret = cfbf_follow_chain(&cfbf, entry->start_sector,
                     entry->stream_size,
-                    entry->stream_size <= header->_ulMiniSectorCutoff,
+                    entry->stream_size < header->_ulMiniSectorCutoff,
                     write_sector_to_file, out);
             if (ret) {
                 error(0, 0, "failed to read %s", dump_object_path);

@@ -289,7 +289,7 @@ cfbf_object_type_to_string(int object_type, char *dest, int dest_max) {
 int
 cfbf_dir_stored_in_mini_stream(struct cfbf *cfbf, struct DirEntry *entry) {
     if (entry->object_type == 2 && entry->stream_size > 0 &&
-            entry->stream_size <= cfbf->header->_ulMiniSectorCutoff) {
+            entry->stream_size < cfbf->header->_ulMiniSectorCutoff) {
         return 1;
     }
     else {

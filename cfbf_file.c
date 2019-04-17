@@ -54,7 +54,7 @@ cfbf_open(const char *filename, struct cfbf *cfbf) {
     cfbf->header = (struct StructuredStorageHeader *) cfbf->file;
 
     if (memcmp(cfbf->header->_abSig, "\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1", 8)) {
-        error(0, errno, "%s: signature bytes not as expected", filename);
+        error(0, errno, "%s: signature bytes not as expected - this doesn't look like a CFB file", filename);
         goto fail;
     }
 

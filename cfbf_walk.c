@@ -92,7 +92,7 @@ cfbf_walk_entry(struct cfbf *cfbf, struct walk_sector *sector_map,
      * means it's the root entry. Either way, the chain is in the main FAT
      * and not the mini one. */
     if (ent->object_type != 0 && ent->object_type != 5 &&
-            ent->stream_size <= cfbf->header->_ulMiniSectorCutoff) {
+            ent->stream_size < cfbf->header->_ulMiniSectorCutoff) {
         fat = &cfbf->mini_fat;
         use_mini = 1;
     }
