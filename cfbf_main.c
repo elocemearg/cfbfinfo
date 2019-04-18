@@ -135,7 +135,7 @@ void
 print_help(FILE *out) {
     fprintf(out, "Compound File Binary File format analyser\n");
     fprintf(out, "Graeme Cole, 2019\n");
-    fprintf(out, "Usage: cfbf [action] [options] file.pub\n");
+    fprintf(out, "Usage: cfbfinfo [action] [options] file.pub\n");
     fprintf(out, "Actions:\n");
     fprintf(out, "    -h         Show this help\n");
     fprintf(out, "    -l         List directory tree\n");
@@ -152,7 +152,7 @@ print_help(FILE *out) {
     fprintf(out, "    -v         Be more verbose\n");
     fprintf(out, "\n");
     fprintf(out, "Use -t to extract text from a Microsoft Publisher file.\n");
-    fprintf(out, "With no action arguments, cfbf will print information from the header and exit.\n");
+    fprintf(out, "If there are no action arguments, print information from the header and exit.\n");
 }
 
 int main(int argc, char **argv) {
@@ -229,13 +229,18 @@ int main(int argc, char **argv) {
         }
     }
 
+    /* We can only do one action */
     if (num_command_options > 1) {
         error(1, 0, "Only one of -r, -l, -t and -w may be given. Use -h for help.");
     }
+
+    /* If no actions have been specified, print information from the header */
     if (num_command_options == 0) {
         show_header = 1;
     }
 
+    /* If a filename has been given, that's the CFB file. Otherwise, that's
+     * an error, so print the help. */
     if (optind < argc) {
         input_filename = argv[optind];
     }
@@ -244,10 +249,13 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
+    /* Open the CFB file, which will fail if there's something seriously
+     * wrong with it, like it not being a CFB file */
     if (cfbf_open(input_filename, &cfbf) != 0) {
         exit(1);
     }
 
+    /* If an output file has been specified, open it */
     if (output_filename == NULL || !strcmp(output_filename, "-")) {
         if (walk)
             out = stderr;
@@ -260,6 +268,7 @@ int main(int argc, char **argv) {
             error(1, errno, "%s", output_filename);
     }
 
+    /* Do whatever action we've been told to do */
     struct StructuredStorageHeader *header = cfbf.header;
     if (show_header) {
         fprintf(out, "DllVersion, MinorVersion:     %hu, %hu\n", (unsigned short) header->_uDllVersion, (unsigned short) header->_uMinorVersion);
