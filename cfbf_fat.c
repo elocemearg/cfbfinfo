@@ -40,13 +40,13 @@ cfbf_fat_open(struct cfbf_fat *fat, struct cfbf *cfbf, SECT *start_sectors,
     fat->sector_entries = calloc(num_fat_sectors_expected, sector_size);
     if (fat->sector_entries == NULL) {
         error(0, errno, "failed to allocate space for FAT sector entries");
-        return -1;
+        goto fail;
     }
 
     fat->fat_sectors = calloc(num_fat_sectors_expected, sizeof(SECT *));
     if (fat->fat_sectors == NULL) {
         error(0, errno, "failed to allocate space for FAT pointers");
-        return -1;
+        goto fail;
     }
     fat->num_fat_sectors = num_fat_sectors_expected;
     fat->sector_size = sector_size;

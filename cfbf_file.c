@@ -71,12 +71,14 @@ cfbf_open(const char *filename, struct cfbf *cfbf) {
                 (unsigned long) cfbf->header->_csectDif,
                 num_fat_sectors) < 0) {
         error(0, 0, "%s: failed to load FAT", filename);
+        memset(&cfbf->fat, 0, sizeof(cfbf->fat));
         goto fail;
     }
 
     if (cfbf_mini_fat_open(&cfbf->mini_fat, &cfbf->fat, cfbf,
                 cfbf->header->_sectMiniFatStart, cfbf->header->_csectMiniFat) < 0) {
         error(0, 0, "%s: failed to load mini-FAT", filename);
+        memset(&cfbf->mini_fat, 0, sizeof(cfbf->mini_fat));
         goto fail;
     }
 
